@@ -3,14 +3,13 @@ if !has('python')
 endif
 
 function! SmartIdent()
-    " TODO: remove the hardcoded PATH
     :python import sys, vim
     :python sys.argv = ['', vim.current.buffer.name]
 
-    let s:script_folder_path = escape( expand( '<sfile>:p:h' ), '\' )
-    let s:python_folder_path = s:script_folder_path . '/smartident.py'
+    :python import smartident_vim
 
-    exe 'pyfile ' .  s:python_folder_path
 endfunction
 
-autocmd BufReadPost * :call SmartIdent()
+augroup smartident
+    autocmd! FileType * call SmartIdent#Setup()
+augroup END

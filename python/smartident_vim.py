@@ -1,4 +1,7 @@
+#!/usr/bin/env python
+
 import sys
+import vim
 
 filename = sys.argv[1]
 
