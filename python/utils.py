@@ -7,11 +7,15 @@ TAB = 2
 def processFile(filename):
     spaces = {}
     tabs = 0
+    lines = 0
     with open(filename, 'rb', 1024*1024) as f:
         for line in f:
             # break in case we don't find line starting with space or tab
             if not (line.startswith(' ') or line.startswith('\t')):
                 continue
+
+            # count spaced lines
+            lines += 1
 
             # ignore comments
             stripedline = line.strip()
@@ -35,7 +39,7 @@ def processFile(filename):
             elif linetype == TAB:
                 tabs += 1
 
-    return tabs, spaces
+    return tabs, spaces, lines
 
 def count_spaces(line):
     count = 0
@@ -43,6 +47,9 @@ def count_spaces(line):
 
     for c in line:
         if c != ' ' and c != "\t":
+            return count, line_type
+
+        elif c != line_type and line_type != None:
             return count, line_type
 
         else:
