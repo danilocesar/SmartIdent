@@ -1,7 +1,78 @@
 import sys
+import os
+from enum import Enum
+from clang import ClangFormatLocator
+from makefile import MakeFileHandler
+from smartparser import SmartParser
 
 SPACE = 1
 TAB = 2
+
+class FileType(Enum):
+    MAKEFILE = 1
+    CSOURCE = 2
+    CHEADER = 3
+    UNKNOWN = 256
+
+class SmartFileHandle:
+    """ SmartFileHandle
+
+    This class should do the hard work of read the file,
+    define its type, etc...
+    """
+
+    def __init__(self, url):
+
+        self.__fullpath = os.path.abspath(url)
+        self.__filename = os.path.basename(url);
+        self.__dirname = os.path.dirname(self.__fullpath)
+
+        self.__type = self.__detect_type()
+
+        if self.__type == FileType.MAKEFILE:
+            self.__makefileHandler = MakeFileHandler()
+            self.__rules = self.__makefileHandler.getRules()
+            return
+
+        if self.__type in [FileType.CSOURCE, FileType.CHEADER]:
+            self.__clangLocator = ClangFormatLocator(self.dirname)
+
+            # In case there's a .clang-format, get the rules and leave
+            if self.__clangLocator.searchAndReadClangFormatFile():
+                self.__rules = self.__clangLocator.getRules()
+                return
+
+            # TODO: Implement a check for vim direct instructions
+
+            self.__smartParser = SmarParser(self.__fullpath)
+            self.__rules = self.__smartParser.getRules()
+
+    def getRules(self):
+        return self.__rules
+
+    def getType(self):
+        """ Get the detected file type """
+        return self.__type
+
+    def __detect_type(self):
+        """
+        As a first version, detecting the file type via filename should be enough.
+        """
+
+        # TODO: Perhaps we should use Mimetypes in the future
+
+        if self.__filename in ["Makefile", "GNUMakefile"]:
+            return FileType.MAKEFILE
+
+        elif self.__filename.endswith(".c") or self.__filename.endswith(".cpp"):
+            return FileType.CSOURCE
+
+        elif self.__filename.endswith(".h") or  self.filename.endswith(".hpp"):
+            return FileType.CHEADER
+
+        return FileType.UNKNOWN
+        pass
+
 
 
 def processFile(filename):
