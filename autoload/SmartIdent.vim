@@ -19,10 +19,10 @@ function! SmartIdent#Setup()
      return
    endif
 
-    augroup smartident
-        autocmd BufReadPre,FileReadPre,FileType * call SmartIdent()
+   augroup smartident
+       autocmd BufReadPre,FileReadPre,FileType * call SmartIdent()
 
-        call SmartIdent()
-    augroup END
+       call SmartIdent()
+   augroup END
 
 endfunction
