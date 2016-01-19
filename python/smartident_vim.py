@@ -2,7 +2,7 @@
 
 import sys
 import vim
-import utils
+from smartident import utils
 
 filename = sys.argv[1]
 
