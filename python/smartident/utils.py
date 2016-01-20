@@ -35,7 +35,7 @@ class SmartFileHandle:
             return
 
         if self.__type in [FileType.CSOURCE, FileType.CHEADER]:
-            self.__clangLocator = ClangFormatLocator(self.dirname)
+            self.__clangLocator = ClangFormatLocator(self.__dirname)
 
             # In case there's a .clang-format, get the rules and leave
             if self.__clangLocator.searchAndReadClangFormatFile():
