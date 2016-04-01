@@ -67,7 +67,7 @@ class SmartFileHandle:
         elif self.__filename.endswith(".c") or self.__filename.endswith(".cpp"):
             return FileType.CSOURCE
 
-        elif self.__filename.endswith(".h") or  self.filename.endswith(".hpp"):
+        elif self.__filename.endswith(".h") or  self.__filename.endswith(".hpp"):
             return FileType.CHEADER
 
         return FileType.UNKNOWN
