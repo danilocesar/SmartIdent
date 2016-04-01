@@ -42,10 +42,11 @@ class SmartFileHandle:
                 self.__rules = self.__clangLocator.getRules()
                 return
 
-            # TODO: Implement a check for vim direct instructions
-
-            self.__smartParser = SmarParser(self.__fullpath)
-            self.__rules = self.__smartParser.getRules()
+        # TODO: Implement a check for vim direct instructions
+        # This is a generic handler, doesn't matter the type of the file
+        # it will try to get the internals
+        self.__smartParser = SmartParser(self.__fullpath)
+        self.__rules = self.__smartParser.getRules()
 
     def getRules(self):
         return self.__rules

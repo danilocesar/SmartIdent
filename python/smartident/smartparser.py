@@ -6,6 +6,9 @@ class SmartParser:
 
     def __init__(self, url):
         self.__url = url
+        self.__rules = []
+
+        self.__processFile(url)
 
     def getRules(self):
         return self.__rules
@@ -23,7 +26,7 @@ class SmartParser:
                 # count spaced lines
                 lines += 1
 
-                # ignore comments
+                # ignore possible comments
                 stripedline = line.strip()
                 if stripedline.startswith('//') or \
                     stripedline.startswith('/*') or \
@@ -36,7 +39,7 @@ class SmartParser:
                 if len(stripedline) == 0:
                     continue
 
-                chars, linetype = count_spaces(line)
+                chars, linetype = self.count_spaces(line)
                 if linetype == SPACE:
                     if not spaces.has_key(chars):
                         spaces[chars] = 0
@@ -47,7 +50,7 @@ class SmartParser:
 
         return tabs, spaces, lines
 
-    def count_spaces(line):
+    def count_spaces(self, line):
         count = 0
         line_type = None
 
